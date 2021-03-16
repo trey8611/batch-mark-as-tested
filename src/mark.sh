@@ -26,7 +26,11 @@ for PLUGINSLUG in "${PLUGINSLUGS[@]}"; do
 
 		# Update only the current stable version.
 		if [ "trunk" != "$VERSION_TRUNK" ]; then
-			READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt"
+			if [ test -f "$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt" ]; then
+				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt"
+			else
+				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/${VERSION_TRUNK//$'\r'}/readme.txt"
+			fi
 		fi
 
 		# Update the tested up to tag.
