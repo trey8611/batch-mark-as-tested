@@ -27,14 +27,17 @@ for PLUGINSLUG in "${PLUGINSLUGS[@]}"; do
 		# Update only the current stable version.
 		if [ "trunk" != "$VERSION_TRUNK" ]; then
 			if [ test -f "$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt" ]; then
-				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt"
+				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt"				
 			else
 				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/${VERSION_TRUNK//$'\r'}/readme.txt"
 			fi
 		fi
 
+		READMETOUPDATETOO="$SRCDIR/plugins/$PLUGINSLUG/trunk/readme.txt"
+
 		# Update the tested up to tag.
 		sed -i "" "s/^Tested up to:.*/Tested up to: $LATESTVERSION/" "$READMETOUPDATE"
+		sed -i "" "s/^Tested up to:.*/Tested up to: $LATESTVERSION/" "$READMETOUPDATETOO"
 
 		# Show a diff of change for confirmation.
 		svn diff "$SRCDIR/plugins/$PLUGINSLUG"
