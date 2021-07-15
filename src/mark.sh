@@ -17,7 +17,11 @@ fi
 IFS=',' read -ra PLUGINSLUGS <<< "$PLUGINS"
 
 for PLUGINSLUG in "${PLUGINSLUGS[@]}"; do
-	svn checkout "https://plugins.svn.wordpress.org/$PLUGINSLUG" "$SRCDIR/plugins/$PLUGINSLUG"
+	if [ ! -d "$SRCDIR/plugins/$PLUGINSLUG" ]; then
+		svn checkout "https://plugins.svn.wordpress.org/$PLUGINSLUG" "$SRCDIR/plugins/$PLUGINSLUG"
+	else
+		svn update "$SRCDIR/plugins/$PLUGINSLUG"
+	fi
 
 	READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/trunk/readme.txt"
 
@@ -26,7 +30,7 @@ for PLUGINSLUG in "${PLUGINSLUGS[@]}"; do
 
 		# Update only the current stable version.
 		if [ "trunk" != "$VERSION_TRUNK" ]; then
-			if [ test -f "$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt" ]; then
+			if [ -f "$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt" ]; then
 				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/$VERSION_TRUNK/readme.txt"				
 			else
 				READMETOUPDATE="$SRCDIR/plugins/$PLUGINSLUG/tags/${VERSION_TRUNK//$'\r'}/readme.txt"
